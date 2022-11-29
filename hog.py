@@ -22,7 +22,20 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    total = 0
+    sow_sad = False
+    while num_rolls > 0:
+        roll = dice()
+        total = total + roll
+        num_rolls = num_rolls - 1
+        if roll == 1:
+            sow_sad = True
+    if sow_sad:
+        return 1
+    else:
+        return total
+
+
     # END PROBLEM 1
 
 
@@ -33,7 +46,9 @@ def tail_points(opponent_score):
 
     """
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    ones = opponent_score % 10
+    tens = (opponent_score // 10) % 10
+    return 2 * abs(tens - ones) + 1
     # END PROBLEM 2
 
 
@@ -50,7 +65,10 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls >= 0, 'Cannot roll a negative number of dice in take_turn.'
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    if num_rolls == 0:
+        return tail_points(opponent_score)
+    else:
+        return roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
 
@@ -73,7 +91,24 @@ def square_update(num_rolls, player_score, opponent_score, dice=six_sided):
 
 
 # BEGIN PROBLEM 4
-"*** YOUR CODE HERE ***"
+def getSqrt(x):
+    i = 1
+    while i <= x:
+        if i**2 == x:
+            return i
+        else:
+            i = i + 1
+    return False
+
+def perfect_square(x):
+    if getSqrt(x):
+        return True
+    else:
+        return False
+
+def next_perfect_square(x):
+    x = getSqrt(x) + 1
+    return x * x 
 # END PROBLEM 4
 
 
@@ -112,7 +147,13 @@ def play(strategy0, strategy1, update,
     """
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    while score0 < goal and score1 < goal:
+        if who == 0:
+            score0 = update(strategy0(score0, score1), score0, score1, dice)
+        else:
+            score1 = update(strategy1(score1, score0), score1, score0, dice)
+        who = 1 - who
+            
     # END PROBLEM 5
     return score0, score1
 
